@@ -43,6 +43,9 @@ VAAPIFixture::VAAPIFixture()
     , m_maxProfiles(0)
     , m_numProfiles(0)
     , m_maxConfigAttributes(0)
+    , m_maxImageFormat(0)
+    , m_numImageFormat(0)
+
     , m_configID(VA_INVALID_ID)
     , m_contextID(VA_INVALID_ID)
     , m_bufferID(VA_INVALID_ID)
@@ -53,6 +56,7 @@ VAAPIFixture::VAAPIFixture()
     m_configAttribToCreateConfig.clear();
     m_querySurfaceAttribList.clear();
     m_surfaceID.clear();
+    m_imageFmtList.clear();
 }
 
 VAAPIFixture::~VAAPIFixture()
@@ -128,12 +132,33 @@ void VAAPIFixture::doGetMaxNumConfigAttribs()
     EXPECT_TRUE(m_maxConfigAttributes > 0);
 }
 
+void VAAPIFixture::doGetMaxNumImageFormats()
+{
+    m_maxImageFormat = vaMaxNumImageFormats(m_vaDisplay);
+
+    EXPECT_TRUE(m_maxImageFormat > 0);
+}
+
+void VAAPIFixture::doQueryImageFormats()
+{
+    m_imageFmtList.resize(m_maxImageFormat);
+
+    EXPECT_STATUS(vaQueryImageFormats(
+        m_vaDisplay, &m_imageFmtList[0], &m_numImageFormat));
+
+    // at least one image format be supported for tests to be executed
+    ASSERT_TRUE(m_numImageFormat > 0);
+
+    m_imageFmtList.resize(m_numImageFormat);
+}
+
 void VAAPIFixture::doGetMaxValues()
 {
 
     doGetMaxProfiles();
     doGetMaxEntrypoints();
     doGetMaxNumConfigAttribs();
+    doGetMaxNumImageFormats();
 }
 
 void VAAPIFixture::doQueryConfigProfiles()
@@ -198,6 +223,16 @@ void VAAPIFixture::doFillConfigAttribList()
     }
 
     EXPECT_EQ(m_configAttribList.size(), m_vaConfigAttribs.size());
+}
+
+bool VAAPIFixture::doFindImageFormatInList(const uint32_t fourcc)
+{
+    auto predicate = [&](VAImageFormat& i) {
+        return i.fourcc == fourcc;
+    };
+
+    return std::find_if(m_imageFmtList.begin(), m_imageFmtList.end(),
+        predicate) != m_imageFmtList.end();
 }
 
 void VAAPIFixture::doGetConfigAttributes(VAProfile profile,
