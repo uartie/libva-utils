@@ -43,10 +43,7 @@ public:
 
 TEST_F(VAAPIConfigAttribs, GetConfigAttribs)
 {
-    std::vector<VAConfigAttrib> configAttribList;
-    VAConfigAttrib configAttrib;
     doGetMaxValues();
-
     doQueryConfigProfiles();
 
     const std::vector<VAProfile>& profileList = getSupportedProfileList();
@@ -61,19 +58,16 @@ TEST_F(VAAPIConfigAttribs, GetConfigAttribs)
         ASSERT_FALSE(entrypointList.empty());
 
         for (auto& itEntrypoint : entrypointList) {
-
-            configAttribList.clear();
             doGetMaxNumConfigAttribs();
             doCreateConfigNoAttrib(itProfile, itEntrypoint);
 
             // once ConfigID is obtained, then the attrib list is populated as
             // well.  This will confirm that the values returned by calling
             // vaGetConfigAttributes do match
-            for (auto& itList: getQueryConfigAttribList())
-            {
-                configAttrib=itList;
+            std::vector<VAConfigAttrib> configAttribList =
+                getQueryConfigAttribList(); // copy so we can edit .value
+            for (auto& configAttrib: configAttribList) {
                 configAttrib.value = 0;
-                configAttribList.push_back(configAttrib);
             }
 
             doGetConfigAttributes(itProfile, itEntrypoint, configAttribList);
