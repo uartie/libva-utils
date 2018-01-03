@@ -43,22 +43,21 @@ public:
 
 TEST_F(VAAPIConfigAttribs, GetConfigAttribs)
 {
-    std::vector<VAProfile> profileList;
-    std::vector<VAEntrypoint> entrypointList;
     std::vector<VAConfigAttrib> configAttribList;
     VAConfigAttrib configAttrib;
     doGetMaxValues();
 
     doQueryConfigProfiles();
 
-    profileList = getSupportedProfileList();
+    const std::vector<VAProfile>& profileList = getSupportedProfileList();
 
     ASSERT_FALSE(profileList.empty());
 
     for(auto& itProfile: profileList)
     {
         doQueryConfigEntrypoints(itProfile);
-        entrypointList = getSupportedEntrypointList();
+        const std::vector<VAEntrypoint>& entrypointList =
+            getSupportedEntrypointList();
         ASSERT_FALSE(entrypointList.empty());
 
         for (auto& itEntrypoint : entrypointList) {
