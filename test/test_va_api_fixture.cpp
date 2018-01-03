@@ -276,7 +276,6 @@ void VAAPIFixture::doDestroyConfig()
 void VAAPIFixture::doQuerySurfacesWithConfigAttribs(const VAProfile& profile,
     const VAEntrypoint& entrypoint)
 {
-    std::vector<VASurfaceAttrib> m_querySurfaceAttribList; //FIXME: shadow var
     uint32_t queryNumSurfaceAttribs;
 
     doCreateConfigWithAttrib(profile, entrypoint);
