@@ -50,43 +50,40 @@ public:
     void doGetMaxNumConfigAttribs();
     void doGetMaxValues();
     void doQueryConfigProfiles();
-    std::vector<VAProfile> getSupportedProfileList();
-    bool doFindProfileInList(VAProfile profile);
-    void doQueryConfigEntrypoints(VAProfile profile);
-    std::vector<VAEntrypoint> getSupportedEntrypointList();
-    bool doFindEntrypointInList(VAEntrypoint entrypoint);
+    const std::vector<VAProfile>& getSupportedProfileList() const;
+    bool doFindProfileInList(const VAProfile&) const;
+    void doQueryConfigEntrypoints(const VAProfile&);
+    const std::vector<VAEntrypoint>& getSupportedEntrypointList() const;
+    bool doFindEntrypointInList(const VAEntrypoint&) const;
 
     void doFillConfigAttribList();
-    void doGetConfigAttributes(VAProfile profile, VAEntrypoint entrypoint);
-    void doGetConfigAttributes(VAProfile profile, VAEntrypoint entrypoint,
-                               std::vector<VAConfigAttrib>& configAttrib);
+    void doGetConfigAttributes(const VAProfile&, const VAEntrypoint&);
+    void doGetConfigAttributes(const VAProfile&, const VAEntrypoint&,
+                               std::vector<VAConfigAttrib>&) const;
     const std::vector<VAConfigAttrib>& getConfigAttribList() const;
     const std::vector<VAConfigAttrib>& getQueryConfigAttribList() const;
-    void doCheckAttribsMatch(std::vector<VAConfigAttrib> configAttrib);
-    void doCreateConfigWithAttrib(VAProfile profile, VAEntrypoint entrypoint);
-    void doQueryConfigAttributes(VAProfile profile, VAEntrypoint entrypoint,
-                                 VAStatus expectation = VA_STATUS_SUCCESS);
-    void doQuerySurfacesWithConfigAttribs(VAProfile profile,
-                                          VAEntrypoint entrypoint);
-    void doQuerySurfacesNoConfigAttribs(VAProfile profile,
-                                        VAEntrypoint entrypoint);
-    void doCreateSurfaces(VAProfile profile, VAEntrypoint entrypoint,
-                          std::pair<uint32_t, uint32_t> resolution);
-    void
-    doGetMaxSurfaceResolution(VAProfile profile, VAEntrypoint entrypoint,
-                              std::pair<uint32_t, uint32_t>& maxResolution);
+    void doCheckAttribsMatch(const std::vector<VAConfigAttrib>&);
+    void doCreateConfigWithAttrib(const VAProfile&, const VAEntrypoint&);
+    void doQueryConfigAttributes(const VAProfile&, const VAEntrypoint&,
+                                 const VAStatus& expectation = VA_STATUS_SUCCESS);
+    void doQuerySurfacesWithConfigAttribs(const VAProfile&, const VAEntrypoint&);
+    void doQuerySurfacesNoConfigAttribs(const VAProfile&, const VAEntrypoint&);
+    void doCreateSurfaces(const VAProfile&, const VAEntrypoint&,
+                          const std::pair<uint32_t, uint32_t>& resolution);
+    void doGetMaxSurfaceResolution(const VAProfile&, const VAEntrypoint&,
+                                   std::pair<uint32_t, uint32_t>& maxResolution);
 
-    void doCreateContext(std::pair<uint32_t, uint32_t> resolution,
-                         VAStatus expectation = VA_STATUS_SUCCESS);
-    void doDestroyContext(VAStatus expectation = VA_STATUS_SUCCESS);
-    void doCreateBuffer(VABufferType bufferType);
+    void doCreateContext(const std::pair<uint32_t, uint32_t>& resolution,
+                         const VAStatus& expectation = VA_STATUS_SUCCESS);
+    void doDestroyContext(const VAStatus& expectation = VA_STATUS_SUCCESS);
+    void doCreateBuffer(const VABufferType&);
     void doDestroyBuffer();
-    void doCreateConfigNoAttrib(VAProfile profile, VAEntrypoint entrypoint);
-    void doCreateConfig(VAProfile profile, VAEntrypoint entrypoint);
-    void doCreateConfigToFail(VAProfile profile, VAEntrypoint entrypoint, int error);
+    void doCreateConfigNoAttrib(const VAProfile&, const VAEntrypoint&);
+    void doCreateConfig(const VAProfile&, const VAEntrypoint&);
+    void doCreateConfigToFail(const VAProfile&, const VAEntrypoint&, int error);
     void doDestroyConfig();
 
-    void doLogSkipTest(VAProfile profile, VAEntrypoint entrypoint);
+    void doLogSkipTest(const VAProfile&, const VAEntrypoint&);
 
 protected:
     // You can remove any or all of the following functions if its body
