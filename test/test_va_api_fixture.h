@@ -50,30 +50,30 @@ public:
     void doGetMaxNumConfigAttribs();
     void doGetMaxValues();
     void doQueryConfigProfiles();
-    const std::vector<VAProfile>& getSupportedProfileList() const;
+    const Profiles& getSupportedProfileList() const;
     bool doFindProfileInList(const VAProfile&) const;
     void doQueryConfigEntrypoints(const VAProfile&);
-    const std::vector<VAEntrypoint>& getSupportedEntrypointList() const;
+    const Entrypoints& getSupportedEntrypointList() const;
     bool doFindEntrypointInList(const VAEntrypoint&) const;
 
     void doFillConfigAttribList();
     void doGetConfigAttributes(const VAProfile&, const VAEntrypoint&);
     void doGetConfigAttributes(const VAProfile&, const VAEntrypoint&,
-                               std::vector<VAConfigAttrib>&) const;
-    const std::vector<VAConfigAttrib>& getConfigAttribList() const;
-    const std::vector<VAConfigAttrib>& getQueryConfigAttribList() const;
-    void doCheckAttribsMatch(const std::vector<VAConfigAttrib>&);
+                               ConfigAttributes&) const;
+    const ConfigAttributes& getConfigAttribList() const;
+    const ConfigAttributes& getQueryConfigAttribList() const;
+    void doCheckAttribsMatch(const ConfigAttributes&);
     void doCreateConfigWithAttrib(const VAProfile&, const VAEntrypoint&);
     void doQueryConfigAttributes(const VAProfile&, const VAEntrypoint&,
                                  const VAStatus& expectation = VA_STATUS_SUCCESS);
     void doQuerySurfacesWithConfigAttribs(const VAProfile&, const VAEntrypoint&);
     void doQuerySurfacesNoConfigAttribs(const VAProfile&, const VAEntrypoint&);
     void doCreateSurfaces(const VAProfile&, const VAEntrypoint&,
-                          const std::pair<uint32_t, uint32_t>& resolution);
+                          const Resolution&);
     void doGetMaxSurfaceResolution(const VAProfile&, const VAEntrypoint&,
-                                   std::pair<uint32_t, uint32_t>& maxResolution);
+                                   Resolution&);
 
-    void doCreateContext(const std::pair<uint32_t, uint32_t>& resolution,
+    void doCreateContext(const Resolution&,
                          const VAStatus& expectation = VA_STATUS_SUCCESS);
     void doDestroyContext(const VAStatus& expectation = VA_STATUS_SUCCESS);
     void doCreateBuffer(const VABufferType&);
@@ -122,13 +122,13 @@ private:
     VAContextID m_contextID;
     VABufferID m_bufferID;
 
-    std::vector<VAProfile> m_profileList;
-    std::vector<VAEntrypoint> m_entrypointList;
-    std::vector<VAConfigAttrib> m_configAttribList;
-    std::vector<VAConfigAttrib> m_configAttribToCreateConfig;
-    std::vector<VAConfigAttrib> m_queryConfigAttribList;
-    std::vector<VASurfaceAttrib> m_querySurfaceAttribList;
-    std::vector<VASurfaceID> m_surfaceID;
+    Profiles m_profileList;
+    Entrypoints m_entrypointList;
+    ConfigAttributes m_configAttribList;
+    ConfigAttributes m_configAttribToCreateConfig;
+    ConfigAttributes m_queryConfigAttribList;
+    SurfaceAttributes m_querySurfaceAttribList;
+    Surfaces m_surfaceID;
 };
 
 } // namespace

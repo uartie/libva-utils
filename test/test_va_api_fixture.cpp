@@ -149,12 +149,12 @@ void VAAPIFixture::doQueryConfigProfiles()
     m_profileList.resize(m_numProfiles);
 }
 
-const std::vector<VAProfile>& VAAPIFixture::getSupportedProfileList() const
+const Profiles& VAAPIFixture::getSupportedProfileList() const
 {
     return m_profileList;
 }
 
-const std::vector<VAEntrypoint>& VAAPIFixture::getSupportedEntrypointList() const
+const Entrypoints& VAAPIFixture::getSupportedEntrypointList() const
 {
     return m_entrypointList;
 }
@@ -210,25 +210,24 @@ void VAAPIFixture::doGetConfigAttributes(const VAProfile& profile,
 
 void VAAPIFixture::doGetConfigAttributes(
     const VAProfile& profile, const VAEntrypoint& entrypoint,
-    std::vector<VAConfigAttrib>& configAttrib) const
+    ConfigAttributes& configAttrib) const
 {
     int numAttributes = configAttrib.size();
     ASSERT_STATUS(vaGetConfigAttributes(m_vaDisplay, profile, entrypoint,
                                         &configAttrib[0], numAttributes));
 }
 
-const std::vector<VAConfigAttrib>& VAAPIFixture::getConfigAttribList() const
+const ConfigAttributes& VAAPIFixture::getConfigAttribList() const
 {
     return m_configAttribList;
 }
 
-const std::vector<VAConfigAttrib>& VAAPIFixture::getQueryConfigAttribList() const
+const ConfigAttributes& VAAPIFixture::getQueryConfigAttribList() const
 {
     return m_queryConfigAttribList;
 }
 
-void VAAPIFixture::doCheckAttribsMatch(
-    const std::vector<VAConfigAttrib>& configAttrib)
+void VAAPIFixture::doCheckAttribsMatch(const ConfigAttributes& configAttrib)
 {
     auto itOne = m_queryConfigAttribList.begin();
     auto itTwo = configAttrib.begin();
@@ -314,9 +313,9 @@ inline bool isSurfaceAttribInList(const VASurfaceAttrib& surfaceAttrib,
 
 void VAAPIFixture::doGetMaxSurfaceResolution(
     const VAProfile& profile, const VAEntrypoint& entrypoint,
-    std::pair<uint32_t, uint32_t>& maxResolution)
+    Resolution& maxResolution)
 {
-    std::vector<VASurfaceAttrib>::iterator it;
+    SurfaceAttributes::iterator it;
     doQuerySurfacesNoConfigAttribs(profile, entrypoint);
     it = std::find_if(m_querySurfaceAttribList.begin(),
                       m_querySurfaceAttribList.end(),
@@ -423,8 +422,7 @@ inline bool isConfigAttribInList(const VAConfigAttrib& configAttrib,
 }
 
 void VAAPIFixture::doCreateSurfaces(const VAProfile& profile,
-    const VAEntrypoint& entrypoint,
-    const std::pair<uint32_t, uint32_t>& resolution)
+    const VAEntrypoint& entrypoint, const Resolution& resolution)
 {
     VASurfaceAttrib* attribList = NULL;
     uint32_t numAttribs = 0;
@@ -441,7 +439,7 @@ void VAAPIFixture::doCreateSurfaces(const VAProfile& profile,
     }
 
     if (!m_queryConfigAttribList.empty()) {
-        std::vector<VAConfigAttrib>::iterator it = std::find_if(
+        ConfigAttributes::iterator it = std::find_if(
             m_queryConfigAttribList.begin(), m_queryConfigAttribList.end(),
             std::bind(isConfigAttribInList, std::placeholders::_1,
                       VAConfigAttribRTFormat));
@@ -461,8 +459,7 @@ void VAAPIFixture::doCreateSurfaces(const VAProfile& profile,
     }
 }
 
-void VAAPIFixture::doCreateContext(
-    const std::pair<uint32_t, uint32_t>& resolution,
+void VAAPIFixture::doCreateContext(const Resolution& resolution,
     const VAStatus& expectation)
 {
     m_contextID = 0;
